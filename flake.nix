@@ -38,8 +38,7 @@
                             in
                                 {
                                     implementation = implementation ;
-                                    test =
-                                        {
+                                    check =                                        {
                                             coreutils ,
                                             expected ,
                                             mkDerivation ,
