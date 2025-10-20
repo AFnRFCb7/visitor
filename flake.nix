@@ -10,6 +10,7 @@
                                 bool ? builtins.null ,
                                 default ? path : value : builtins.throw "The definition at ${ builtins.concatStringsSep " / " ( builtins.concatLists [ [ "*ROOT*" ] ( builtins.map builtins.toJSON path ) ] ) } is invalid.  It is of type ${ builtins.typeOf value }.  It is ${ if builtins.any ( t : t == builtins.typeOf value ) [ "bool" "float" "int" "null" "path" "string" ] then  builtins.toJSON value else "unstringable" }." ,
                                 float ? builtins.null ,
+                                float ? builtins.null ,
                                 int ? builtins.null ,
                                 lambda ? builtins.null ,
                                 list ? path : list : list ,
@@ -100,28 +101,54 @@
                             {
                                 implementation = implementation ;
                                 test =
-                                   pkgs : expected : success : visitors : value :
+                                    {
+                                        coreutils ,
+                                        expected ,
+                                        mkDerivation ,
+                                        success ? true ,
+                                        visitors ,
+                                        value ,
+                                        writeShellApplication ,
+                                        yq-go
+                                    } :
                                         let
                                             eval = builtins.tryEval ( implementation visitors value ) ;
                                             status = { success = success ; value = expected ; } == eval ;
                                             in
-                                                pkgs.stdenv.mkDerivation
+                                                mkDerivation
                                                     {
                                                         installPhase =
-                                                            if status then
-                                                                ''
-                                                                    touch $out
-                                                                    echo SUCCESS
-                                                                    exit 0
-                                                                ''
-                                                            else
-                                                                ''
-                                                                    touch $out
-                                                                    echo '${ builtins.toJSON { expected = { success = success ; value = expected ; } ; observed = eval ; } }' | yq --yaml-output "." >&2
-                                                                    exit 64
-                                                                '' ;
+                                                            ''
+                                                                execute-test $out"
+                                                            '' ;
                                                         name = "test-visitor" ;
-                                                        nativeBuildInputs = [ pkgs.coreutils pkgs.yq ] ;
+                                                        nativeBuildInputs =
+                                                            [
+                                                                (
+                                                                    if status then
+                                                                        writeShellApplication
+                                                                            {
+                                                                                name = "execute-test" ;
+                                                                                runtimeInputs = [ coreutils ] ;
+                                                                                text =
+                                                                                    ''
+                                                                                        OUT="$1"
+                                                                                        touch "$OUT"
+                                                                                    '' ;
+                                                                                }
+                                                                    else
+                                                                        writeShellApplication
+                                                                            {
+                                                                                name = "execute-test" ;
+                                                                                runtimeInputs = [ coreutils yq-go ] ;
+                                                                                text =
+                                                                                    ''
+                                                                                        echo '${ builtins.toJSON { expected = { success = success ; value = expected ; } ; observed = eval ; } }' | yq --prettyPrint "." >&2
+                                                                                        exit 64
+                                                                                    '' ;
+                                                                            }
+                                                                )
+                                                            ] ;
                                                         src = ./. ;
                                                     } ;
                             } ;
