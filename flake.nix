@@ -90,7 +90,7 @@
                                                                                     runtimeInputs = [ coreutils yq-go ] ;
                                                                                     text =
                                                                                         ''
-                                                                                            echo '${ builtins.toJSON { expected = { success = success ; value = expected ; } ; observed = eval ; } }' | yq --prettyPrint "." >&2
+                                                                                            echo '${ builtins.toJSON { expected = { success = success ; value = expected ; } ; } }' | yq --prettyPrint "." >&2
                                                                                             exit 64
                                                                                         '' ;
                                                                                 }
