@@ -25,7 +25,7 @@
                                         visit =
                                             path : value :
                                                 let
-                                                    type = builtins.hasAttr value ;
+                                                    type = builtins.typeOf value ;
                                                     in
                                                         if builtins.hasAttr type visitors then
                                                             if type == "list" then builtins.genList ( index : visit ( builtins.concatLists [ path [ index ] ] ) ( builtins.elemAt value index ) ) ( builtins.length value )
