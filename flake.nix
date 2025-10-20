@@ -55,11 +55,12 @@
                                             mkDerivation ,
                                             success ? true ,
                                             value ,
+                                            visitors ,
                                             writeShellApplication ,
                                             yq-go
                                         } :
                                             let
-                                                eval = builtins.tryEval ( implementation value ) ;
+                                                eval = builtins.tryEval ( implementation visitors value ) ;
                                                 status = { success = success ; value = expected ; } == eval ;
                                                 in
                                                     mkDerivation
