@@ -15,10 +15,10 @@
                                    float ? default ,
                                    int ? default ,
                                    lambda ? default ,
-                                   list ? path : list : list ,
+                                   list ? ( path : list : list ) ,
                                    null ? default ,
                                    path ? builtins.null ,
-                                   set ? path : set : set ,
+                                   set ? ( path : set : set ) ,
                                    string ? default
                                 } :
                                     let
@@ -66,7 +66,7 @@
                                                         {
                                                             installPhase =
                                                                 ''
-                                                                    execute-test $out"
+                                                                    execute-test "$out"
                                                                 '' ;
                                                             name = "test-visitor" ;
                                                             nativeBuildInputs =
