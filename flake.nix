@@ -21,11 +21,35 @@
                                    set ? path : set : set ,
                                    string ? default
                                 } :
-
+                                    let
+                                        visit =
+                                            path : value :
+                                                let
+                                                    type = builtins.hasAttr value ;
+                                                    in
+                                                        if builtins.hasAttr type visitors then
+                                                            if type == "list" then builtins.genList ( index : visit ( builtins.concatLists [ path [ index ] ] ) ( builtins.elemAt value index ) ) ( builtins.length value )
+                                                            else if type == "set" then builtins.mapAttrs ( name : value : visit ( builtins.concatLists [ path [ name ] ] ) value ) value
+                                                            else builtins.getAttr type visitors path value
+                                                        else unknown path value ;
+                                        visitors =
+                                            {
+                                                bool = bool ;
+                                                float = float ;
+                                                int = int ;
+                                                lambda = lambda ;
+                                                list = list ;
+                                                null = null ;
+                                                path = path ;
+                                                set = set ;
+                                                string = string ;
+                                            } ;
+                                        in visit [ ] ;
                             in
                                 {
                                     implementation = implementation ;
-                                    check =                                        {
+                                    check =
+                                        {
                                             coreutils ,
                                             expected ,
                                             mkDerivation ,
