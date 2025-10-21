@@ -52,10 +52,10 @@
                                         {
                                             coreutils ,
                                             diffutil ,
-                                            expected ? null ,
+                                            expected ? false ,
                                             mkDerivation ,
                                             success ? false ,
-                                            value ? false ,
+                                            value ? null ,
                                             visitors ? { } ,
                                             writeShellApplication ,
                                             yq-go
