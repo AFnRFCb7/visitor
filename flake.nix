@@ -54,7 +54,7 @@
                                             diffutil ,
                                             expected ? null ,
                                             mkDerivation ,
-                                            success ? true ,
+                                            success ? false ,
                                             value ? null ,
                                             visitors ? { } ,
                                             writeShellApplication ,
