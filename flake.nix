@@ -98,9 +98,9 @@
                                                                                                 rm --recursive --force "$TEMPORARY"
                                                                                             }
                                                                                             trap cleanup EXIT
-                                                                                            echo '${ builtins.toJSON { success = success ; value = expected ; } }' | yq --prettyPrint "." > "$TEMPORARY/expected"
-                                                                                            echo > "$TEMPORARY/observed"
-                                                                                            # echo '${ eval }' | yq --prettyPrint "." > "$TEMPORARY/observed"
+                                                                                            echo > "$TEMPORARY/expected"
+                                                                                            # echo '${ builtins.toJSON { success = success ; value = expected ; } }' | yq --prettyPrint "." > "$TEMPORARY/expected"
+                                                                                            echo '${ eval }' | yq --prettyPrint "." > "$TEMPORARY/observed"
                                                                                             diff --side-by-side "$TEMPORARY/expected" "TEMPORARY/observed"
                                                                                             exit 64
                                                                                         '' ;
