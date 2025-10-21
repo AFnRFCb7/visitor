@@ -55,7 +55,7 @@
                                             expected ? null ,
                                             mkDerivation ,
                                             success ? false ,
-                                            value ? null ,
+                                            value ? false ,
                                             visitors ? { } ,
                                             writeShellApplication ,
                                             yq-go
