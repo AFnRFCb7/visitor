@@ -96,7 +96,7 @@
                                                                                             mkdir --parents "$TEMPORARY"
                                                                                             echo '${ builtins.toJSON { success = success ; value = expected ; } }' | yq --prettyPrint "." > "$TEMPORARY/expected"
                                                                                             echo '${ builtins.toJSON eval }' | yq --prettyPrint "." > "$TEMPORARY/observed"
-                                                                                            diff --side-by-side "$TEMPORARY/expected" "TEMPORARY/observed"
+                                                                                            diff --side-by-side "$TEMPORARY/expected" "$TEMPORARY/observed"
                                                                                             rm --recursive --force "$TEMPORARY"
                                                                                             exit 64
                                                                                         '' ;
