@@ -17,7 +17,7 @@
                                    lambda ? default ,
                                    list ? ( path : list : list ) ,
                                    null ? default ,
-                                   path ? builtins.null ,
+                                   path ? default ,
                                    set ? ( path : set : set ) ,
                                    string ? default
                                 } :
