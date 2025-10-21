@@ -94,13 +94,13 @@
                                                                                         ''
                                                                                             TEMPORARY=/build/temporary
                                                                                             mkdir --parents "$TEMPORARY"
-                                                                                            echo '${ builtins.toJSON { success = success ; value = expected ; } }' | yq --prettyPrint "." > "$TEMPORARY/expected"
-                                                                                            echo '${ builtins.toJSON eval }' | yq --prettyPrint "." > "$TEMPORARY/observed"
+                                                                                            echo '${ builtins.toJSON { success = success ; value = expected ; } }' | yq --prettyPrint "." > "$TEMPORARY/expected.yaml"
+                                                                                            echo '${ builtins.toJSON eval }' | yq --prettyPrint "." > "$TEMPORARY/observed.yaml"
                                                                                             cat "$TEMPORARY/expected.yaml" >&2
                                                                                             echo >&2
                                                                                             cat "$TEMPORARY/observed.yaml" >&2
                                                                                             echo >&2
-                                                                                            diff --unified "$TEMPORARY/expected" "$TEMPORARY/observed"
+                                                                                            diff --unified "$TEMPORARY/expected.yaml" "$TEMPORARY/observed.yaml"
                                                                                             rm --recursive --force "$TEMPORARY"
                                                                                             exit 64
                                                                                         '' ;
