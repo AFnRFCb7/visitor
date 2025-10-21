@@ -51,6 +51,7 @@
                                     check =
                                         {
                                             coreutils ,
+                                            diffutil ,
                                             expected ,
                                             mkDerivation ,
                                             success ? true ,
@@ -91,7 +92,15 @@
                                                                                     runtimeInputs = [ coreutils yq-go ] ;
                                                                                     text =
                                                                                         ''
-                                                                                            echo '${ builtins.toJSON { expected = { success = success ; value = expected ; } ; observed = eval ; } }' | yq --prettyPrint "." >&2
+                                                                                            TEMPORARY=/build/temporary
+                                                                                            mkdir --parents "$TEMPORARY"
+                                                                                            cleanup ( ) {
+                                                                                                rm --recursive --force "$TEMPORARY"
+                                                                                            }
+                                                                                            trap cleanup EXIT
+                                                                                            echo '${ builtins.toJSON { success = success ; value = expected ; } }' | yq --prettyPrint "." > "$TEMPORARY/expected"
+                                                                                            echo '${ eval }' | yq --prettyPrint "." > "$TEMPORARY/observed"
+                                                                                            diff --side-by-side "$TEMPORARY/expected" "TEMPORARY/observed"
                                                                                             exit 64
                                                                                         '' ;
                                                                                 }
