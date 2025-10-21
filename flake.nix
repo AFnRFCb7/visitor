@@ -100,7 +100,7 @@
                                                                                             echo >&2
                                                                                             cat "$TEMPORARY/observed.yaml" >&2
                                                                                             echo >&2
-                                                                                            diff --side-by-side "$TEMPORARY/expected" "$TEMPORARY/observed"
+                                                                                            diff --unified "$TEMPORARY/expected" "$TEMPORARY/observed"
                                                                                             rm --recursive --force "$TEMPORARY"
                                                                                             exit 64
                                                                                         '' ;
