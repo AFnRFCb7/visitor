@@ -29,7 +29,7 @@
                                                     in
                                                         if builtins.hasAttr type visitors then
                                                             if type == "list" then builtins.genList ( index : visit ( builtins.concatLists [ path [ index ] ] ) ( builtins.elemAt value index ) ) ( builtins.length value )
-                                                            else if type == "set" then builtins.trace "" ( builtins.mapAttrs ( name : value : visit ( builtins.concatLists [ path [ name ] ] ) value ) value )
+                                                            else if type == "set" then builtins.trace "89764279280543a15cc6dc5758dacfd0fcf91c1bb1d8045888ecc64223334bc6b7dda28486b0103a5edb8816b2bb523fa6066506ae18d262a170fec7f7424d76" ( builtins.mapAttrs ( name : value : visit ( builtins.concatLists [ path [ name ] ] ) value ) value )
                                                             else builtins.getAttr type visitors path value
                                                         else unknown path value ;
                                         visitors =
