@@ -27,11 +27,11 @@
                                                 let
                                                     type = builtins.typeOf value ;
                                                     in
-                                                        if builtins.hasAttr type visitors then
-                                                            if type == "list" then builtins.genList ( index : visit ( builtins.concatLists [ path [ index ] ] ) ( builtins.elemAt value index ) ) ( builtins.length value )
-                                                            else if type == "set" then builtins.mapAttrs ( name : value_ : visit ( builtins.concatLists [ path [ name ] ] ) value_ ) value
-                                                            else builtins.getAttr type visitors path value
-                                                        else unknown path value ;
+                                                        if builtins.hasAttr ( builtins.trace "6f579fd1 ${ type }" type )  visitors then
+                                                            if type == "list" then builtins.trace "22f6c574" ( builtins.genList ( index : visit ( builtins.concatLists [ path [ index ] ] ) ( builtins.elemAt value index ) ) ( builtins.length value ) )
+                                                            else if type == "set" then builtins.trace "db24234e" ( builtins.mapAttrs ( name : value : visit ( builtins.concatLists [ path [ name ] ] ) value ) value )
+                                                            else builtins.trace "e9a44910 ${ type }" ( builtins.getAttr type visitors path value )
+                                                        else builtins.trace "20bfab85" ( unknown path value ) ;
                                         visitors =
                                             {
                                                 bool = bool ;
