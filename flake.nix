@@ -92,16 +92,20 @@
                                                                                     runtimeInputs = [ coreutils yq-go ] ;
                                                                                     text =
                                                                                         ''
-                                                                                            TEMPORARY=/build/temporary
-                                                                                            mkdir --parents "$TEMPORARY"
-                                                                                            echo '${ builtins.toJSON { success = success ; value = expected ; } }' | yq --prettyPrint "." > "$TEMPORARY/expected.yaml"
-                                                                                            echo '${ builtins.toJSON eval }' | yq --prettyPrint "." > "$TEMPORARY/observed.yaml"
-                                                                                            cat "$TEMPORARY/expected.yaml" >&2
+                                                                                            OUT="$1"
+                                                                                            mkdir --parents "$OUT"
+                                                                                            echo '${ builtins.toJSON { success = success ; value = expected ; } }' | yq --prettyPrint "." > "$OUT/expected.yaml"
+                                                                                            echo '${ builtins.toJSON eval }' | yq --prettyPrint "." > "$OUT/observed.yaml"
+                                                                                            echo EXPECTED >&2
+                                                                                            echo "$OUT/expected.yaml" >&2
+                                                                                            cat "$OUT/expected.yaml" >&2
                                                                                             echo >&2
-                                                                                            cat "$TEMPORARY/observed.yaml" >&2
+                                                                                            echo OBSERVED >&2
+                                                                                            echo "$OUT/observed.yaml" >&2
+                                                                                            cat "$OUT/observed.yaml" >&2
                                                                                             echo >&2
-                                                                                            diff --unified "$TEMPORARY/expected.yaml" "$TEMPORARY/observed.yaml"
-                                                                                            rm --recursive --force "$TEMPORARY"
+                                                                                            echo DIFF >&2
+                                                                                            diff --unified "$OUT/expected.yaml" "$OUT/observed.yaml"
                                                                                             exit 64
                                                                                         '' ;
                                                                                 }
