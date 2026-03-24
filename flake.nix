@@ -6,8 +6,8 @@
             {
                 lib =
                     {
-                        default ? ( path : value : builtins.throw "The definition for uuid=${ builtins.toString uuid } at ${ builtins.toJSON path } is invalid.  It is of type ${ builtins.typeOf value }.  It is ${ if builtins.any ( t : t == builtins.typeOf value ) [ "bool" "float" "int" "null" "path" "string" ] then builtins.toJSON value else "unstringable" }." ) ,
-                        unknown ? ( path : value : builtins.throw "The definition uuid=${ builtins.toString uuid } at ${ builtins.toJSON path } is of unknown type.  It is of type ${ builtins.typeOf value }.  We only know about bool, float, int, lambda, list, null, path, set, string." )
+                        default ? ( path : value : builtins.throw "The definition at ${ builtins.toJSON path } is invalid.  It is of type ${ builtins.typeOf value }.  It is ${ if builtins.any ( t : t == builtins.typeOf value ) [ "bool" "float" "int" "null" "path" "string" ] then builtins.toJSON value else "unstringable" }." ) ,
+                        unknown ? ( path : value : builtins.throw "The definition at ${ builtins.toJSON path } is of unknown type.  It is of type ${ builtins.typeOf value }.  We only know about bool, float, int, lambda, list, null, path, set, string." )
                     } :
                         let
                             implementation =
@@ -20,8 +20,7 @@
                                    null ? default ,
                                    path ? default ,
                                    set ? ( path : set : set ) ,
-                                   string ? default ,
-                                   uuid ? "10606"
+                                   string ? default
                                 } :
                                     let
                                         visit =
