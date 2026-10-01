@@ -99,7 +99,8 @@
                                                                                                     if expected == observed then ""
                                                                                                     else
                                                                                                         ''
-                                                                                                            failure 5942198107310342
+                                                                                                            exit 99
+                                                                                                            # failure 5942198107310342
                                                                                                         '' ;
                                                                                         }
                                                                                 )
