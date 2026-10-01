@@ -62,12 +62,14 @@
                                     implementation = implementation ;
                                     check =
                                         {
+                                            failure ,
                                             nixosTest ,
                                             order
                                         } :
                                         {
                                             arguments ,
-                                            expected ,
+                                            success ,
+                                            value ,
                                             visitors
                                         } :
                                             let
@@ -89,7 +91,10 @@
                                                                                                     ( config.failure { visitor = ignore : builtins.toJSON ; } )
                                                                                                 ] ;
                                                                                             text =
-                                                                                                if config.visitor visitors arguments == expected then ""
+                                                                                                let
+                                                                                                    expected = { success = success ; value = value ; } ;
+                                                                                                    observed = builtins.tryEval config.visitor visitors arguments ;
+                                                                                                if expected == observed then ""
                                                                                                 else
                                                                                                     ''
                                                                                                         failure 5942198107310342
@@ -97,7 +102,7 @@
                                                                                         }
                                                                                 )
                                                                             ] ;
-                                                                        imports = [ implementation ] ;
+                                                                        imports = [ failure implementation ] ;
                                                                     } ;
                                                             testScript =
                                                                 ''
