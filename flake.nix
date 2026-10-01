@@ -16,45 +16,46 @@
                                         options =
                                             {
                                                 visitor =
-                                                    {
-                                                        default =
-                                                            {
-                                                               bool ? default ,
-                                                               float ? default ,
-                                                               int ? default ,
-                                                               lambda ? default ,
-                                                               list ? ( path : list : list ) ,
-                                                               null ? default ,
-                                                               path ? default ,
-                                                               set ? ( path : set : set ) ,
-                                                               string ? default
-                                                            } :
-                                                                let
-                                                                    visit =
-                                                                        path : value :
-                                                                            let
-                                                                                type = builtins.typeOf value ;
-                                                                                in
-                                                                                    if builtins.hasAttr type visitors then
-                                                                                        if type == "list" then builtins.genList ( index : visit ( builtins.concatLists [ path [ index ] ] ) ( builtins.elemAt value index ) ) ( builtins.length value )
-                                                                                        else if type == "set" then visitors.set path ( builtins.mapAttrs ( name : value : visit ( builtins.concatLists [ path [ name ] ] ) value ) value )
-                                                                                        else builtins.getAttr type visitors path value
-                                                                                    else unknown path value ;
-                                                                    visitors =
-                                                                        {
-                                                                            bool = bool ;
-                                                                            float = float ;
-                                                                            int = int ;
-                                                                            lambda = lambda ;
-                                                                            list = list ;
-                                                                            null = null ;
-                                                                            path = path ;
-                                                                            set = set ;
-                                                                            string = string ;
-                                                                        } ;
-                                                                    in visit [ ] ;
-                                                        type = lib.types.functionTo lib.types.package ;
-                                                    } ;
+                                                    lib.mkOption
+                                                        {
+                                                            default =
+                                                                {
+                                                                   bool ? default ,
+                                                                   float ? default ,
+                                                                   int ? default ,
+                                                                   lambda ? default ,
+                                                                   list ? ( path : list : list ) ,
+                                                                   null ? default ,
+                                                                   path ? default ,
+                                                                   set ? ( path : set : set ) ,
+                                                                   string ? default
+                                                                } :
+                                                                    let
+                                                                        visit =
+                                                                            path : value :
+                                                                                let
+                                                                                    type = builtins.typeOf value ;
+                                                                                    in
+                                                                                        if builtins.hasAttr type visitors then
+                                                                                            if type == "list" then builtins.genList ( index : visit ( builtins.concatLists [ path [ index ] ] ) ( builtins.elemAt value index ) ) ( builtins.length value )
+                                                                                            else if type == "set" then visitors.set path ( builtins.mapAttrs ( name : value : visit ( builtins.concatLists [ path [ name ] ] ) value ) value )
+                                                                                            else builtins.getAttr type visitors path value
+                                                                                        else unknown path value ;
+                                                                        visitors =
+                                                                            {
+                                                                                bool = bool ;
+                                                                                float = float ;
+                                                                                int = int ;
+                                                                                lambda = lambda ;
+                                                                                list = list ;
+                                                                                null = null ;
+                                                                                path = path ;
+                                                                                set = set ;
+                                                                                string = string ;
+                                                                            } ;
+                                                                        in visit [ ] ;
+                                                            type = lib.types.functionTo lib.types.package ;
+                                                        } ;
                                             } ;
                                     } ;
                             in
