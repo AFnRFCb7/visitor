@@ -11,108 +11,101 @@
                     } :
                         let
                             implementation =
-                                {
-                                   bool ? default ,
-                                   float ? default ,
-                                   int ? default ,
-                                   lambda ? default ,
-                                   list ? ( path : list : list ) ,
-                                   null ? default ,
-                                   path ? default ,
-                                   set ? ( path : set : set ) ,
-                                   string ? default
-                                } :
-                                    let
-                                        visit =
-                                            path : value :
-                                                let
-                                                    type = builtins.typeOf value ;
-                                                    in
-                                                        if builtins.hasAttr type visitors then
-                                                            if type == "list" then builtins.genList ( index : visit ( builtins.concatLists [ path [ index ] ] ) ( builtins.elemAt value index ) ) ( builtins.length value )
-                                                            else if type == "set" then visitors.set path ( builtins.mapAttrs ( name : value : visit ( builtins.concatLists [ path [ name ] ] ) value ) value )
-                                                            else builtins.getAttr type visitors path value
-                                                        else unknown path value ;
-                                        visitors =
+                                { lib , ... } :
+                                    {
+                                        options =
                                             {
-                                                bool = bool ;
-                                                float = float ;
-                                                int = int ;
-                                                lambda = lambda ;
-                                                list = list ;
-                                                null = null ;
-                                                path = path ;
-                                                set = set ;
-                                                string = string ;
+                                                visitor =
+                                                    {
+                                                        default =
+                                                            {
+                                                               bool ? default ,
+                                                               float ? default ,
+                                                               int ? default ,
+                                                               lambda ? default ,
+                                                               list ? ( path : list : list ) ,
+                                                               null ? default ,
+                                                               path ? default ,
+                                                               set ? ( path : set : set ) ,
+                                                               string ? default
+                                                            } :
+                                                                let
+                                                                    visit =
+                                                                        path : value :
+                                                                            let
+                                                                                type = builtins.typeOf value ;
+                                                                                in
+                                                                                    if builtins.hasAttr type visitors then
+                                                                                        if type == "list" then builtins.genList ( index : visit ( builtins.concatLists [ path [ index ] ] ) ( builtins.elemAt value index ) ) ( builtins.length value )
+                                                                                        else if type == "set" then visitors.set path ( builtins.mapAttrs ( name : value : visit ( builtins.concatLists [ path [ name ] ] ) value ) value )
+                                                                                        else builtins.getAttr type visitors path value
+                                                                                    else unknown path value ;
+                                                                    visitors =
+                                                                        {
+                                                                            bool = bool ;
+                                                                            float = float ;
+                                                                            int = int ;
+                                                                            lambda = lambda ;
+                                                                            list = list ;
+                                                                            null = null ;
+                                                                            path = path ;
+                                                                            set = set ;
+                                                                            string = string ;
+                                                                        } ;
+                                                                    in visit [ ] ;
+                                                        type = lib.types.functionTo lib.types.package ;
+                                                    } ;
                                             } ;
-                                        in visit [ ] ;
+                                    } ;
                             in
                                 {
                                     implementation = implementation ;
                                     check =
                                         {
-                                            coreutils ,
-                                            diffutil ,
-                                            expected ? false ,
-                                            mkDerivation ,
-                                            success ? false ,
-                                            value ? null ,
-                                            visitors ? { } ,
-                                            writeShellApplication ,
-                                            yq-go
+                                            arguments ,
+                                            expected ,
+                                            visitors
                                         } :
                                             let
-                                                eval = builtins.tryEval ( implementation visitors value ) ;
-                                                status = { success = success ; value = expected ; } == eval ;
-                                                in
-                                                    mkDerivation
+                                                value =
+                                                    nixosTest
                                                         {
-                                                            installPhase =
+                                                            name = "visitor" ;
+                                                            nodes.client =
+                                                                { config , pkgs , ... }  :
+                                                                    {
+                                                                        environment.systemPackages =
+                                                                            [
+                                                                                (
+                                                                                    pkgs.writeShellApplication
+                                                                                        {
+                                                                                            name = "test-script" ;
+                                                                                            runtimeInputs =
+                                                                                                [
+                                                                                                    ( config.failure { visitor = visitor ; } )
+                                                                                                ] ;
+                                                                                            text =
+                                                                                                if visitor arguments == expected then ""
+                                                                                                else
+                                                                                                    ''
+                                                                                                        failure 5942198107310342
+                                                                                                    '' ;
+                                                                                        }
+                                                                                )
+                                                                            ] ;
+                                                                        imports = [ implementation ] ;
+                                                                    } ;
+                                                            testScript =
                                                                 ''
-                                                                    execute-test "$out"
+                                                                    client.wait_for_unit("network-online.target")
+                                                                    client.succeed("test-script")
                                                                 '' ;
-                                                            name = "test-visitor" ;
-                                                            nativeBuildInputs =
-                                                                [
-                                                                    (
-                                                                        if status then
-                                                                            writeShellApplication
-                                                                                {
-                                                                                    name = "execute-test" ;
-                                                                                    runtimeInputs = [ coreutils ] ;
-                                                                                    text =
-                                                                                        ''
-                                                                                            OUT="$1"
-                                                                                            touch "$OUT"
-                                                                                        '' ;
-                                                                                    }
-                                                                        else
-                                                                            writeShellApplication
-                                                                                {
-                                                                                    name = "execute-test" ;
-                                                                                    runtimeInputs = [ coreutils yq-go ] ;
-                                                                                    text =
-                                                                                        ''
-                                                                                            OUT="$1"
-                                                                                            mkdir --parents "$OUT"
-                                                                                            echo '${ builtins.toJSON { success = success ; value = expected ; } }' | yq --prettyPrint "." > "$OUT/expected.yaml"
-                                                                                            echo '${ builtins.toJSON eval }' | yq --prettyPrint "." > "$OUT/observed.yaml"
-                                                                                            echo EXPECTED >&2
-                                                                                            echo "$OUT/expected.yaml" >&2
-                                                                                            cat "$OUT/expected.yaml" >&2
-                                                                                            echo >&2
-                                                                                            echo OBSERVED >&2
-                                                                                            echo "$OUT/observed.yaml" >&2
-                                                                                            cat "$OUT/observed.yaml" >&2
-                                                                                            echo >&2
-                                                                                            echo DIFF >&2
-                                                                                            diff --unified "$OUT/expected.yaml" "$OUT/observed.yaml"
-                                                                                            exit 64
-                                                                                        '' ;
-                                                                                }
-                                                                    )
-                                                                ] ;
-                                                            src = ./. ;
+                                                        } ;
+                                                    in
+                                                        {
+                                                            name = builtins.concatStringsSep "-" [ "check" ( builtins.toString order ) ] ;
+                                                            order = order ;
+                                                            value = ignore : value ;
                                                         } ;
                                 } ;
             } ;
