@@ -64,6 +64,7 @@
                                         {
                                             arguments ,
                                             expected ,
+                                            nixosTest ,
                                             visitors
                                         } :
                                             let
