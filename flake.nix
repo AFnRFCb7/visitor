@@ -62,10 +62,12 @@
                                     implementation = implementation ;
                                     check =
                                         {
+                                            nixosTest ,
+                                            order
+                                        } :
+                                        {
                                             arguments ,
                                             expected ,
-                                            nixosTest ,
-                                            order ,
                                             visitors
                                         } :
                                             let
