@@ -65,6 +65,7 @@
                                             arguments ,
                                             expected ,
                                             nixosTest ,
+                                            order ,
                                             visitors
                                         } :
                                             let
