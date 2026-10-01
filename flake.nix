@@ -94,11 +94,12 @@
                                                                                                 let
                                                                                                     expected = { success = success ; value = value ; } ;
                                                                                                     observed = builtins.tryEval config.visitor visitors arguments ;
-                                                                                                if expected == observed then ""
-                                                                                                else
-                                                                                                    ''
-                                                                                                        failure 5942198107310342
-                                                                                                    '' ;
+                                                                                                in
+                                                                                                    if expected == observed then ""
+                                                                                                    else
+                                                                                                        ''
+                                                                                                            failure 5942198107310342
+                                                                                                        '' ;
                                                                                         }
                                                                                 )
                                                                             ] ;
