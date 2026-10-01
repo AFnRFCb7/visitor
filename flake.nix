@@ -83,6 +83,7 @@
                                                                                             name = "test-script" ;
                                                                                             runtimeInputs =
                                                                                                 [
+                                                                                                    ( config.visitor { } )
                                                                                                     ( config.failure { visitor = ignore : builtins.toJSON ; } )
                                                                                                 ] ;
                                                                                             text =
