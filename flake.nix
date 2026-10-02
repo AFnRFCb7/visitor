@@ -104,8 +104,10 @@
                                                                                                             OBSERVED="$( jq "." ${ builtins.toFile "observed" ( builtins.toJSON observed ) } )" || exit 99
                                                                                                             jq \
                                                                                                                 --null-input \
+                                                                                                                --argjson EXPECTED "$EXPECTED" \
                                                                                                                 --argjson OBSERVED "$OBSERVED" \
                                                                                                                 '{
+                                                                                                                    "expected" : $EXPECTED ,
                                                                                                                     "observed" : $OBSERVED
                                                                                                                 }' >&2
                                                                                                             exit 99
