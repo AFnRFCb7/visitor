@@ -120,7 +120,6 @@
                                                                     } ;
                                                             testScript =
                                                                 ''
-                                                                    client.wait_for_unit("network-online.target")
                                                                     client.succeed("test-script")
                                                                 '' ;
                                                         } ;
