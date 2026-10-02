@@ -100,8 +100,8 @@
                                                                                                     if expected == observed then ""
                                                                                                     else
                                                                                                         ''
-                                                                                                            EXPECTED="$( jq "." ${ builtins.toFile "expected" ( builtins.toJSON expected ) } )" || exit 99
-                                                                                                            OBSERVED="$( jq "." ${ builtins.toFile "observed" ( builtins.toJSON observed ) } )" || exit 99
+                                                                                                            EXPECTED="$( jq "." ${ builtins.toFile "expected" ( builtins.toJSON expected ) } )" || failure 4727697212392530
+                                                                                                            OBSERVED="$( jq "." ${ builtins.toFile "observed" ( builtins.toJSON observed ) } )" || failure 8774722082080212
                                                                                                             jq \
                                                                                                                 --null-input \
                                                                                                                 --argjson EXPECTED "$EXPECTED" \
@@ -110,8 +110,7 @@
                                                                                                                     "expected" : $EXPECTED ,
                                                                                                                     "observed" : $OBSERVED
                                                                                                                 }' >&2
-                                                                                                            exit 99
-                                                                                                            # failure 5942198107310342
+                                                                                                            failure 5942198107310342
                                                                                                         '' ;
                                                                                         }
                                                                                 )
