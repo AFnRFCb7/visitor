@@ -34,7 +34,7 @@
                                                                         visit =
                                                                             path : value :
                                                                                 let
-                                                                                    type = builtins.typeOf value ;
+                                                                                    type = builtins.trace "9438708567429364" ( builtins.typeOf value ) ;
                                                                                     in
                                                                                         if builtins.hasAttr type visitors then
                                                                                             if type == "list" then builtins.genList ( index : visit ( builtins.concatLists [ path [ index ] ] ) ( builtins.elemAt value index ) ) ( builtins.length value )
@@ -109,7 +109,8 @@
                                                                                                                 '{
                                                                                                                     "expected" : $EXPECTED ,
                                                                                                                     "observed" : $OBSERVED
-                                                                                                                }' | failure 5942198107310342
+                                                                                                                }' >&2
+                                                                                                                failure 5942198107310342
                                                                                                         '' ;
                                                                                         }
                                                                                 )
