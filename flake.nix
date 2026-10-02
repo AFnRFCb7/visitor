@@ -100,7 +100,7 @@
                                                                                                     if expected == observed then ""
                                                                                                     else
                                                                                                         ''
-                                                                                                            OBSERVED="$( jq ${ builtins.toFile "observed" ( builtins.toJSON observed ) } )" || exit 99
+                                                                                                            OBSERVED="$( jq "." ${ builtins.toFile "observed" ( builtins.toJSON observed ) } )" || exit 99
                                                                                                             jq \
                                                                                                                 --null-input \
                                                                                                                 --argjson OBSERVED "$OBSERVED" \
