@@ -109,8 +109,7 @@
                                                                                                                 '{
                                                                                                                     "expected" : $EXPECTED ,
                                                                                                                     "observed" : $OBSERVED
-                                                                                                                }' >&2
-                                                                                                            failure 5942198107310342
+                                                                                                                }' | failure 5942198107310342
                                                                                                         '' ;
                                                                                         }
                                                                                 )
