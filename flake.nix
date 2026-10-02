@@ -128,7 +128,7 @@
                                                         {
                                                             name = builtins.concatStringsSep "-" [ "check" ( builtins.toString order ) ] ;
                                                             order = order ;
-                                                            value = ignore : test ;
+                                                            value = test ;
                                                         } ;
                                 } ;
             } ;
