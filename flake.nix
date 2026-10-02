@@ -36,7 +36,7 @@
                                                                                 "1012888416118558"
                                                                                 (
                                                                                     path :
-                                                                                        ( builtins.trace "5029155724888017"
+                                                                                        ( builtins.trace "5029155724888017 ${ builtins.toJSON path }"
                                                                                             ( value :
                                                                                                 let
                                                                                                     type = builtins.trace "9438708567429364" ( builtins.typeOf value ) ;
