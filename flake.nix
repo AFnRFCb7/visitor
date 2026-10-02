@@ -89,6 +89,7 @@
                                                                                             name = "test-script" ;
                                                                                             runtimeInputs =
                                                                                                 [
+                                                                                                    pkgs.jq
                                                                                                     ( config.failure { visitor = ignore : builtins.toJSON ; } )
                                                                                                 ] ;
                                                                                             text =
@@ -99,6 +100,16 @@
                                                                                                     if expected == observed then ""
                                                                                                     else
                                                                                                         ''
+                                                                                                            EXPECTED="$( jq ${ builtins.toFile "expected" ( builtins.toJSON expected ) } )" || exit 99
+                                                                                                            OBSERVED="$( jq ${ builtins.toFile "observed" ( builtins.toJSON observed ) } )" || exit 99
+                                                                                                            jq \
+                                                                                                                --null-input \
+                                                                                                                --argjson EXPECTED "$EXPECTED" \
+                                                                                                                --argjson OBSERVED "$OBSERVED" \
+                                                                                                                '{
+                                                                                                                    "expected" : $EXPECTED ,
+                                                                                                                    "observed" : $OBSERVED
+                                                                                                                }' >&2
                                                                                                             exit 99
                                                                                                             # failure 5942198107310342
                                                                                                         '' ;
