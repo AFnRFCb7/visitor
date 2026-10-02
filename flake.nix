@@ -74,7 +74,7 @@
                                             visitors
                                         } :
                                             let
-                                                value =
+                                                test =
                                                     nixosTest
                                                         {
                                                             name = "visitor" ;
@@ -126,7 +126,7 @@
                                                         {
                                                             name = builtins.concatStringsSep "-" [ "check" ( builtins.toString order ) ] ;
                                                             order = order ;
-                                                            value = ignore : value ;
+                                                            value = ignore : test ;
                                                         } ;
                                 } ;
             } ;
