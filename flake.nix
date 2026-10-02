@@ -63,9 +63,9 @@
                                     implementation = implementation ;
                                     check =
                                         {
-                                            dependencies ,
                                             failure ,
-                                            nixosTest
+                                            nixosTest ,
+                                            obviated-by
                                         } :
                                         {
                                             arguments ,
@@ -126,7 +126,7 @@
                                                         } ;
                                                     in
                                                         {
-                                                            dependencies = dependencies ;
+                                                            obviated-by = obviated-by ;
                                                             test = test ;
                                                             type = "visitor" ;
                                                         } ;
