@@ -62,7 +62,7 @@
                                                                                 set = set ;
                                                                                 string = string ;
                                                                             } ;
-                                                                        in builtins.trace "2104565148756886" ( visit [ ] ) ;
+                                                                        in visit [ ] ;
                                                             type = lib.types.functionTo lib.types.package ;
                                                         } ;
                                             } ;
