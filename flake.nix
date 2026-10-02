@@ -63,9 +63,9 @@
                                     implementation = implementation ;
                                     check =
                                         {
+                                            dependencies ,
                                             failure ,
-                                            nixosTest ,
-                                            order
+                                            nixosTest
                                         } :
                                         {
                                             arguments ,
@@ -126,9 +126,9 @@
                                                         } ;
                                                     in
                                                         {
-                                                            name = builtins.concatStringsSep "-" [ "check" ( builtins.toString order ) ] ;
-                                                            order = order ;
-                                                            value = test ;
+                                                            dependencies = dependencies ;
+                                                            test = test ;
+                                                            type = "visitor" ;
                                                         } ;
                                 } ;
             } ;
