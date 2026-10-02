@@ -36,22 +36,19 @@
                                                                                 "1012888416118558"
                                                                                 (
                                                                                     path :
-                                                                                        ( builtins.trace "5029155724888017 ${ builtins.toJSON path }"
-                                                                                            ( value :
-                                                                                                let
-                                                                                                    type = builtins.trace "9438708567429364" ( builtins.typeOf value ) ;
-                                                                                                    in
-                                                                                                        builtins.trace
-                                                                                                            "9649564459067287"
-                                                                                                            (
-                                                                                                                if builtins.hasAttr type visitors then
-                                                                                                                    if type == "list" then builtins.genList ( index : visit ( builtins.concatLists [ path [ index ] ] ) ( builtins.elemAt value index ) ) ( builtins.length value )
-                                                                                                                    else if type == "set" then visitors.set path ( builtins.mapAttrs ( name : value : visit ( builtins.concatLists [ path [ name ] ] ) value ) value )
-                                                                                                                    else builtins.getAttr type visitors path value
-                                                                                                                else unknown path value
-                                                                                                            )
-                                                                                            )
-                                                                                        )
+                                                                                        value :
+                                                                                            let
+                                                                                                type = builtins.trace "9438708567429364" ( builtins.typeOf value ) ;
+                                                                                                in
+                                                                                                    builtins.trace
+                                                                                                        "9649564459067287"
+                                                                                                        (
+                                                                                                            if builtins.hasAttr type visitors then
+                                                                                                                if type == "list" then builtins.genList ( index : visit ( builtins.concatLists [ path [ index ] ] ) ( builtins.elemAt value index ) ) ( builtins.length value )
+                                                                                                                else if type == "set" then visitors.set path ( builtins.mapAttrs ( name : value : visit ( builtins.concatLists [ path [ name ] ] ) value ) value )
+                                                                                                                else builtins.getAttr type visitors path value
+                                                                                                            else unknown path value
+                                                                                                        )
                                                                                 ) ;
                                                                         visitors =
                                                                             {
