@@ -70,7 +70,7 @@
                                                                                 string = string ;
                                                                             } ;
                                                                         in builtins.trace "8247132116671856" ( visit [ ] ) ;
-                                                            type = lib.types.functionTo lib.types.package ;
+                                                            type = lib.types.functionTo lib.types.functionTo lib.types.anything ;
                                                         } ;
                                             } ;
                                     } ;
