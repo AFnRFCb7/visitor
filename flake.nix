@@ -32,6 +32,9 @@
                                                                 } :
                                                                     let
                                                                         visit =
+                                                                            builtins.trace
+                                                                                ""
+                                                                                (
                                                                             path :
                                                                                 value :
                                                                                     let
@@ -54,7 +57,7 @@
                                                                                 set = set ;
                                                                                 string = string ;
                                                                             } ;
-                                                                        in visit [ ] ;
+                                                                        in builtins.trace "8247132116671856" ( visit [ ] ) ;
                                                             type = lib.types.functionTo lib.types.package ;
                                                         } ;
                                             } ;
