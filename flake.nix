@@ -98,7 +98,7 @@
                                                                                                     expected = { success = success ; value = value ; } ;
                                                                                                     observed =
                                                                                                         let
-                                                                                                            observed = config.visitor visitors arguments ;
+                                                                                                            observed = config.visitor visitors ( builtins.trace "7066694716876078" arguments ) ;
                                                                                                             in builtins.trace "2323742362554359" observed ;
                                                                                                 in
                                                                                                     if expected == observed then ""
