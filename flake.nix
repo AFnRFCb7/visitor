@@ -54,7 +54,7 @@
                                                                                 set = set ;
                                                                                 string = string ;
                                                                             } ;
-                                                                        in builtins.trace "8247132116671856" ( visit [ ] ) ;
+                                                                        in visit [ ] ;
                                                             type = lib.types.functionTo ( lib.types.functionTo lib.types.anything ) ;
                                                         } ;
                                             } ;
