@@ -113,7 +113,7 @@
                                                                                                     expected = { success = success ; value = value ; } ;
                                                                                                     observed =
                                                                                                         let
-                                                                                                            observed = builtins.trace "7344402573450888 ${ builtins.toJSON ( builtins.tryEval ( builtins.typeOf ( config.visitor 0686448757961464 ) ) ) }" ( builtins.tryEval ( builtins.trace "0484780767394769 ${ builtins.toJSON ( builtins.functionArgs config.visitor ) }" ( config.visitor visitors ( builtins.trace "7066694716876078" arguments ) ) ) ) ;
+                                                                                                            observed = builtins.trace "7344402573450888 ${ builtins.toJSON ( builtins.tryEval ( builtins.typeOf ( config.visitor { } ) ) ) }" ( builtins.tryEval ( builtins.trace "0484780767394769 ${ builtins.toJSON ( builtins.functionArgs config.visitor ) }" ( config.visitor visitors ( builtins.trace "7066694716876078" arguments ) ) ) ) ;
                                                                                                             in builtins.trace "2323742362554359" observed ;
                                                                                                 in
                                                                                                     if expected == observed then ""
