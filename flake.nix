@@ -5,6 +5,7 @@
         { self } :
             {
                 lib =
+                    { options-mapper ? name : value : value } :
                     {
                         default ? { WTF-4513819208216899 ? null } : null , # ( path : value : builtins.throw "The definition at ${ builtins.toJSON path } is invalid.  It is of type ${ builtins.typeOf value }.  It is ${ if builtins.any ( t : t == builtins.typeOf value ) [ "bool" "float" "int" "null" "path" "string" ] then builtins.toJSON value else "unstringable" }." ) ,
                         unknown ? { WTF-1024404484230206 ? null } : null , # ( path : value : builtins.throw "The definition at ${ builtins.toJSON path } is of unknown type.  It is of type ${ builtins.typeOf value }.  We only know about bool, float, int, lambda, list, null, path, set, string." ) ,
@@ -15,50 +16,51 @@
                                 { lib , ... } :
                                     {
                                         options =
-                                            {
-                                                visitor =
-                                                    lib.mkOption
-                                                        {
-                                                            default =
-                                                                {
-                                                                   bool ? default ,
-                                                                   float ? default ,
-                                                                   int ? default ,
-                                                                   lambda ? default ,
-                                                                   list ? ( path : list : list ) ,
-                                                                   null ? default ,
-                                                                   path ? default ,
-                                                                   set ? ( path : set : set ) ,
-                                                                   string ? default
-                                                                } :
-                                                                    let
-                                                                        visit =
-                                                                            path : value :
-                                                                                let
-                                                                                    type = builtins.typeOf value ;
-                                                                                    in
-                                                                                        if builtins.hasAttr type visitors then
-                                                                                            if type == "list" then builtins.genList ( index : visit ( builtins.concatLists [ path [ index ] ] ) ( builtins.elemAt value index ) ) ( builtins.length value )
-                                                                                            else if type == "set" then visitors.set path ( builtins.mapAttrs ( name : value : visit ( builtins.concatLists [ path [ name ] ] ) value ) value )
-                                                                                            else builtins.getAttr type visitors path value
-                                                                                        else unknown path value ;
-                                                                        visitors =
-                                                                            {
-                                                                                bool = bool ;
-                                                                                float = float ;
-                                                                                int = int ;
-                                                                                lambda = lambda ;
-                                                                                list = list ;
-                                                                                null = null ;
-                                                                                path = path ;
-                                                                                set = set ;
-                                                                                string = string ;
-                                                                            } ;
-                                                                        in visit [ ] ;
-                                                            type = lib.types.functionTo ( lib.types.functionTo lib.types.anything ) ;
-                                                        } ;
-                                            } ;
-                                    } ;
+                                            builtins.mapAttrs options-mapper
+                                                {
+                                                    visitor =
+                                                        lib.mkOption
+                                                            {
+                                                                default =
+                                                                    {
+                                                                       bool ? default ,
+                                                                       float ? default ,
+                                                                       int ? default ,
+                                                                       lambda ? default ,
+                                                                       list ? ( path : list : list ) ,
+                                                                       null ? default ,
+                                                                       path ? default ,
+                                                                       set ? ( path : set : set ) ,
+                                                                       string ? default
+                                                                    } :
+                                                                        let
+                                                                            visit =
+                                                                                path : value :
+                                                                                    let
+                                                                                        type = builtins.typeOf value ;
+                                                                                        in
+                                                                                            if builtins.hasAttr type visitors then
+                                                                                                if type == "list" then builtins.genList ( index : visit ( builtins.concatLists [ path [ index ] ] ) ( builtins.elemAt value index ) ) ( builtins.length value )
+                                                                                                else if type == "set" then visitors.set path ( builtins.mapAttrs ( name : value : visit ( builtins.concatLists [ path [ name ] ] ) value ) value )
+                                                                                                else builtins.getAttr type visitors path value
+                                                                                            else unknown path value ;
+                                                                            visitors =
+                                                                                {
+                                                                                    bool = bool ;
+                                                                                    float = float ;
+                                                                                    int = int ;
+                                                                                    lambda = lambda ;
+                                                                                    list = list ;
+                                                                                    null = null ;
+                                                                                    path = path ;
+                                                                                    set = set ;
+                                                                                    string = string ;
+                                                                                } ;
+                                                                            in visit [ ] ;
+                                                                type = lib.types.functionTo ( lib.types.functionTo lib.types.anything ) ;
+                                                            } ;
+                                                } ;
+                                        } ;
                             in
                                 {
                                     implementation = implementation ;
