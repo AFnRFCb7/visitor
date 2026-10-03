@@ -99,7 +99,7 @@
                                                                                                     observed =
                                                                                                         let
                                                                                                             observed = builtins.trace "7344402573450888 ${ builtins.toJSON ( ( builtins.typeOf ( config.visitor { } ) ) ) }" ( builtins.tryEval ( builtins.trace "0484780767394769 ${ builtins.toJSON ( builtins.functionArgs config.visitor ) }" ( config.visitor visitors ( builtins.trace "7066694716876078" arguments ) ) ) ) ;
-                                                                                                            in builtins.trace "2323742362554359" observed ;
+                                                                                                            in observed ;
                                                                                                 in
                                                                                                     if expected == observed then ""
                                                                                                     else
