@@ -2,7 +2,7 @@
 {
     inputs = { } ;
     outputs =
-        { self , WTF-5598051640633139 ? null } :
+        { self } :
             {
                 lib =
                     {
