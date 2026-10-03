@@ -103,7 +103,7 @@
                                                                                     pkgs.writeShellApplication
                                                                                         {
                                                                                             name = "test-script" ;
-                                                                                            runtimeInputs =:
+                                                                                            runtimeInputs =
                                                                                                 [
                                                                                                     pkgs.jq
                                                                                                     ( config.failure { visitor = ignore : builtins.toJSON ; } )
