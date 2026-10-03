@@ -42,7 +42,7 @@
                                                                                                 (
                                                                                                     value :
                                                                                                         let
-                                                                                                            type = builtins.typeOf value ;
+                                                                                                            type = builtins.trace "5064599494262303" ( builtins.typeOf value ) ;
                                                                                                             in
                                                                                                                 builtins.trace
                                                                                                                     "3463489126327058"
