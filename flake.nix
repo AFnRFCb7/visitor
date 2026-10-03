@@ -110,7 +110,7 @@
                                                                                             text =
                                                                                                 let
                                                                                                     expected = { success = success ; value = value ; } ;
-                                                                                                    observed = builtins.tryEval ( config.visitor visitors arguments ) ;
+                                                                                                    observed = builtins.tryEval ( config.visitor visitors ( builtins.trace "7066694716876078" arguments ) ) ;
                                                                                                 in
                                                                                                     if expected == observed then ""
                                                                                                     else
