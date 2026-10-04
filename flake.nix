@@ -98,7 +98,6 @@
                                         } :
                                         {
                                             arguments ,
-                                            default ,
                                             success ,
                                             value ,
                                             visitors
@@ -129,7 +128,7 @@
                                                                                                     text =
                                                                                                         let
                                                                                                             expected = { success = success ; value = value ; } ;
-                                                                                                            observed = builtins.tryEval ( _config.visitor { default = default ; unknown = path : value : builtins.throw "There should be no unknown types.  If there are new types the test should account for them." ; } visitors arguments ) ;
+                                                                                                            observed = builtins.tryEval ( _config.visitor { } visitors arguments ) ;
                                                                                                         in
                                                                                                             if expected == observed then ""
                                                                                                             else
