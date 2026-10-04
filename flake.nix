@@ -123,7 +123,7 @@
                                                                                                     runtimeInputs =
                                                                                                         [
                                                                                                             _pkgs.jq
-                                                                                                            ( _config.failure { visitor = ignore : builtins.toJSON ; } )
+                                                                                                            ( _config.failure { } )
                                                                                                         ] ;
                                                                                                     text =
                                                                                                         let
