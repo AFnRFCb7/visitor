@@ -8,9 +8,7 @@
                     {
                         config-identity ? x : x ,
                         lib-identity ? x : x ,
-                        pkgs-identity ? x : x ,
-                        default ? path : value : builtins.throw "The definition at ${ builtins.toJSON path } is invalid.  It is of type ${ builtins.typeOf value }.  It is ${ if builtins.any ( t : t == builtins.typeOf value ) [ "bool" "float" "int" "null" "path" "string" ] then builtins.toJSON value else "unstringable" }." ,
-                        unknown ? path : value : builtins.throw "The definition at ${ builtins.toJSON path } is of unknown type.  It is of type ${ builtins.typeOf value }.  We only know about bool, float, int, lambda, list, null, path, set, string."
+                        pkgs-identity ? x : x
                     } :
                         let
                             implementation =
@@ -25,6 +23,10 @@
                                                             _lib.mkOption
                                                                 {
                                                                     default =
+                                                                        {
+                                                                            default ? path : value : builtins.throw "The definition at ${ builtins.toJSON path } is invalid.  It is of type ${ builtins.typeOf value }.  It is ${ if builtins.any ( t : t == builtins.typeOf value ) [ "bool" "float" "int" "null" "path" "string" ] then builtins.toJSON value else "unstringable" }." ,
+                                                                            unknown ? path : value : builtins.throw "The definition at ${ builtins.toJSON path } is of unknown type.  It is of type ${ builtins.typeOf value }.  We only know about bool, float, int, lambda, list, null, path, set, string."
+                                                                        } :
                                                                         {
                                                                            bool ? default ,
                                                                            float ? default ,
@@ -60,7 +62,7 @@
                                                                                         string = string ;
                                                                                     } ;
                                                                                 in visit [ ] ;
-                                                                    type = _lib.types.functionTo ( _lib.types.functionTo _lib.types.anything ) ;
+                                                                    type = _lib.types.functionTo ( _lib.types.functionTo ( _lib.types.functionTo _lib.types.anything ) ) ;
                                                                 } ;
                                                     } ;
                                             } ;
@@ -126,7 +128,7 @@
                                                                                                     text =
                                                                                                         let
                                                                                                             expected = { success = success ; value = value ; } ;
-                                                                                                            observed = builtins.tryEval ( _config.visitor visitors arguments ) ;
+                                                                                                            observed = builtins.tryEval ( _config.visitor { default = default ; unknown = path : value : builtins.throw "There should be no unknown types.  If there are new types the test should account for them." ; } visitors arguments ) ;
                                                                                                         in
                                                                                                             if expected == observed then ""
                                                                                                             else
