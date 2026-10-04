@@ -69,7 +69,28 @@
                                     implementation = implementation ;
                                     check =
                                         {
-                                            failure ,
+                                            failure ?
+                                                { pkgs , ... } :
+                                                    let
+                                                        _pkgs = pkgs-identity pkgs ;
+                                                        in
+                                                            {
+                                                                environment.systemPackages =
+                                                                    [
+                                                                        (
+                                                                            _pkgs.writeShellApplication
+                                                                                {
+                                                                                    name = "failure" ;
+                                                                                    runtimeInputs = [ _pkgs.coreutils ] ;
+                                                                                    text =
+                                                                                        ''
+                                                                                            echo "$@" >&2
+                                                                                            exit 108
+                                                                                        '' ;
+                                                                                }
+                                                                        )
+                                                                    ] ;
+                                                            } ,
                                             nixosTest ,
                                             obviated-by
                                         } :
