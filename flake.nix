@@ -62,7 +62,7 @@
                                                                                         string = string ;
                                                                                     } ;
                                                                                 in visit [ ] ;
-                                                                    type = _lib.types.functionTo ( _lib.types.functionTo _lib.types.anything ) ;
+                                                                    type = _lib.types.functionTo ( _lib.types.functionTo ( _lib.types.functionTo _lib.types.anything ) ) ;
                                                                 } ;
                                                     } ;
                                             } ;
