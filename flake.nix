@@ -8,12 +8,14 @@
                     {
                         config-identity ? x : x ,
                         lib-identity ? x : x ,
+                        implementation-identity ? x : x ,
                         pkgs-identity ? x : x
                     } :
                         let
                             implementation =
-                                { lib , ... } :
+                                { config , lib , ... } :
                                     let
+                                        _config = config-identity config ;
                                         _lib = lib-identity lib ;
                                         in
                                             {
@@ -24,8 +26,8 @@
                                                                 {
                                                                     default =
                                                                         {
-                                                                            default ? path : value : builtins.throw "The definition at ${ builtins.toJSON path } is invalid.  It is of type ${ builtins.typeOf value }.  It is ${ if builtins.any ( t : t == builtins.typeOf value ) [ "bool" "float" "int" "null" "path" "string" ] then builtins.toJSON value else "unstringable" }." ,
-                                                                            unknown ? path : value : builtins.throw "The definition at ${ builtins.toJSON path } is of unknown type.  It is of type ${ builtins.typeOf value }.  We only know about bool, float, int, lambda, list, null, path, set, string."
+                                                                            default ? path : value : _config.trip "The definition at ${ builtins.toJSON path } is invalid.  It is of type ${ builtins.typeOf value }.  It is ${ if builtins.any ( t : t == builtins.typeOf value ) [ "bool" "float" "int" "null" "path" "string" ] then builtins.toJSON value else "unstringable" }." ,
+                                                                            unknown ? path : value : _config.trip "The definition at ${ builtins.toJSON path } is of unknown type.  It is of type ${ builtins.typeOf value }.  We only know about bool, float, int, lambda, list, null, path, set, string."
                                                                         } :
                                                                         {
                                                                            bool ? default ,
@@ -68,7 +70,7 @@
                                             } ;
                             in
                                 {
-                                    implementation = implementation ;
+                                    implementation = implementation-identity implementation ;
                                     check =
                                         {
                                             failure ?
@@ -94,7 +96,20 @@
                                                                     ] ;
                                                             } ,
                                             nixosTest ,
-                                            obviated-by
+                                            obviated-by ,
+                                            trip ?
+                                                { lib , ... } :
+                                                    let
+                                                        _lib = lib-identity lib ;
+                                                        in
+                                                            {
+                                                                options.trip =
+                                                                    _lib.mkOption
+                                                                        {
+                                                                            default = uuid : builtins.throw uuid ;
+                                                                            type = _lib.types.functionTo _lib.types.anything ;
+                                                                        } ;
+                                                            }
                                         } :
                                         {
                                             arguments ,
@@ -148,7 +163,7 @@
                                                                                                 }
                                                                                         )
                                                                                     ] ;
-                                                                                imports = [ failure implementation ] ;
+                                                                                imports = [ failure implementation trip ] ;
                                                                             } ;
                                                             testScript =
                                                                 ''
