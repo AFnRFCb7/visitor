@@ -80,7 +80,23 @@
                                                         in
                                                             with identified ;
                                                                 {
-                                                                    environment.systemPackages =
+                                                                    options.failure =
+                                                                        lib.mkOption
+                                                                            {
+                                                                                default =
+                                                                                    ignore :
+                                                                                        pkgs.writeShellApplication
+                                                                                            {
+                                                                                                name = "failure" ;
+                                                                                                runtimeInputs = [ pkgs.coreutils ] ;
+                                                                                                text =
+                                                                                                    ''
+                                                                                                        cat "$@" >&2
+                                                                                                        exit 164
+                                                                                                    '' ;
+                                                                                            } ;
+                                                                                type = lib.types.functionTo lib.types.package ;
+                                                                            }
                                                                         [
                                                                             (
                                                                                 pkgs.writeShellApplication
