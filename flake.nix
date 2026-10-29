@@ -96,21 +96,7 @@
                                                                                                     '' ;
                                                                                             } ;
                                                                                 type = lib.types.functionTo lib.types.package ;
-                                                                            }
-                                                                        [
-                                                                            (
-                                                                                pkgs.writeShellApplication
-                                                                                    {
-                                                                                        name = "failure" ;
-                                                                                        runtimeInputs = [ pkgs.coreutils ] ;
-                                                                                        text =
-                                                                                            ''
-                                                                                                echo "$@" >&2
-                                                                                                exit 108
-                                                                                            '' ;
-                                                                                    }
-                                                                            )
-                                                                        ] ;
+                                                                            } ;
                                                                 } ,
                                             nixosTest ,
                                             obviated-by ,
