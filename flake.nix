@@ -1,119 +1,194 @@
-# dfd03aff
+# 5888781975567541
 {
     inputs = { } ;
     outputs =
         { self } :
             {
                 lib =
-                    {
-                        default ? ( path : value : builtins.throw "The definition at ${ builtins.toJSON path } is invalid.  It is of type ${ builtins.typeOf value }.  It is ${ if builtins.any ( t : t == builtins.typeOf value ) [ "bool" "float" "int" "null" "path" "string" ] then builtins.toJSON value else "unstringable" }." ) ,
-                        unknown ? ( path : value : builtins.throw "The definition at ${ builtins.toJSON path } is of unknown type.  It is of type ${ builtins.typeOf value }.  We only know about bool, float, int, lambda, list, null, path, set, string." )
-                    } :
+                    { input ? null , output ? null } :
                         let
                             implementation =
-                                {
-                                   bool ? default ,
-                                   float ? default ,
-                                   int ? default ,
-                                   lambda ? default ,
-                                   list ? ( path : list : list ) ,
-                                   null ? default ,
-                                   path ? default ,
-                                   set ? ( path : set : set ) ,
-                                   string ? default
-                                } :
+                                { config , lib , ... } @module :
                                     let
-                                        visit =
-                                            path : value :
-                                                let
-                                                    type = builtins.typeOf value ;
-                                                    in
-                                                        if builtins.hasAttr type visitors then
-                                                            if type == "list" then builtins.genList ( index : visit ( builtins.concatLists [ path [ index ] ] ) ( builtins.elemAt value index ) ) ( builtins.length value )
-                                                            else if type == "set" then visitors.set path ( builtins.mapAttrs ( name : value : visit ( builtins.concatLists [ path [ name ] ] ) value ) value )
-                                                            else builtins.getAttr type visitors path value
-                                                        else unknown path value ;
-                                        visitors =
-                                            {
-                                                bool = bool ;
-                                                float = float ;
-                                                int = int ;
-                                                lambda = lambda ;
-                                                list = list ;
-                                                null = null ;
-                                                path = path ;
-                                                set = set ;
-                                                string = string ;
-                                            } ;
-                                        in visit [ ] ;
+                                        identified =
+                                            if builtins.typeOf input == "lambda" then input module
+                                            else if builtins.typeOf input == "null" then module
+                                            else builtins.throw "8050236596639547" ;
+                                        in
+                                            with identified ;
+                                                {
+                                                    options =
+                                                        {
+                                                            visitor =
+                                                                lib.mkOption
+                                                                    {
+                                                                        default =
+                                                                            {
+                                                                                default ? path : value : config.trip "The definition at ${ builtins.toJSON path } is invalid.  It is of type ${ builtins.typeOf value }.  It is ${ if builtins.any ( t : t == builtins.typeOf value ) [ "bool" "float" "int" "null" "path" "string" ] then builtins.toJSON value else "unstringable" }." ,
+                                                                                unknown ? path : value : config.trip "The definition at ${ builtins.toJSON path } is of unknown type.  It is of type ${ builtins.typeOf value }.  We only know about bool, float, int, lambda, list, null, path, set, string."
+                                                                            } :
+                                                                            {
+                                                                               bool ? default ,
+                                                                               float ? default ,
+                                                                               int ? default ,
+                                                                               lambda ? default ,
+                                                                               list ? ( path : list : list ) ,
+                                                                               null ? default ,
+                                                                               path ? default ,
+                                                                               set ? ( path : set : set ) ,
+                                                                               string ? default
+                                                                            } :
+                                                                                let
+                                                                                    visit =
+                                                                                        path : value :
+                                                                                            let
+                                                                                                type = builtins.typeOf value ;
+                                                                                                in
+                                                                                                    if builtins.hasAttr type visitors then
+                                                                                                        if type == "list" then builtins.genList ( index : visit ( builtins.concatLists [ path [ index ] ] ) ( builtins.elemAt value index ) ) ( builtins.length value )
+                                                                                                        else if type == "set" then visitors.set path ( builtins.mapAttrs ( name : value : visit ( builtins.concatLists [ path [ name ] ] ) value ) value )
+                                                                                                        else builtins.getAttr type visitors path value
+                                                                                                    else unknown path value ;
+                                                                                    visitors =
+                                                                                        {
+                                                                                            bool = bool ;
+                                                                                            float = float ;
+                                                                                            int = int ;
+                                                                                            lambda = lambda ;
+                                                                                            list = list ;
+                                                                                            null = null ;
+                                                                                            path = path ;
+                                                                                            set = set ;
+                                                                                            string = string ;
+                                                                                        } ;
+                                                                                    in visit [ ] ;
+                                                                        type = lib.types.functionTo ( lib.types.functionTo ( lib.types.functionTo lib.types.anything ) ) ;
+                                                                    } ;
+                                                        } ;
+                                                } ;
                             in
                                 {
-                                    implementation = implementation ;
                                     check =
                                         {
-                                            coreutils ,
-                                            diffutil ,
-                                            expected ? false ,
-                                            mkDerivation ,
-                                            success ? false ,
-                                            value ? null ,
-                                            visitors ? { } ,
-                                            writeShellApplication ,
-                                            yq-go
+                                            failure ?
+                                                { pkgs , ... } @module :
+                                                    let
+                                                        identified =
+                                                            if builtins.typeOf input == "lambda" then input module
+                                                            else if builtins.typeOf input == "null" then module
+                                                            else builtins.throw "3089158225937633" ;
+                                                        in
+                                                            with identified ;
+                                                                {
+                                                                    environment.systemPackages =
+                                                                        [
+                                                                            (
+                                                                                pkgs.writeShellApplication
+                                                                                    {
+                                                                                        name = "failure" ;
+                                                                                        runtimeInputs = [ pkgs.coreutils ] ;
+                                                                                        text =
+                                                                                            ''
+                                                                                                echo "$@" >&2
+                                                                                                exit 108
+                                                                                            '' ;
+                                                                                    }
+                                                                            )
+                                                                        ] ;
+                                                                } ,
+                                            nixosTest ,
+                                            obviated-by ,
+                                            trip ?
+                                                { lib , ... } @module:
+                                                    let
+                                                        identified =
+                                                            if builtins.typeOf input == "lambda" then input module
+                                                            else if builtins.typeOf input == "null" then module
+                                                            else builtins.throw "8491044949862058" ;
+                                                        in
+                                                            with identified ;
+                                                                {
+                                                                    options.trip =
+                                                                        lib.mkOption
+                                                                            {
+                                                                                default = uuid : builtins.throw uuid ;
+                                                                                type = lib.types.functionTo lib.types.anything ;
+                                                                            } ;
+                                                                }
+                                        } :
+                                        {
+                                            arguments ,
+                                            success ,
+                                            value ,
+                                            visitors
                                         } :
                                             let
-                                                eval = builtins.tryEval ( implementation visitors value ) ;
-                                                status = { success = success ; value = expected ; } == eval ;
-                                                in
-                                                    mkDerivation
+                                                test =
+                                                    nixosTest
                                                         {
-                                                            installPhase =
+                                                            name = "visitor" ;
+                                                            nodes.client =
+                                                                { config , pkgs , ... } @module :
+                                                                    let
+                                                                        identified =
+                                                                            if builtins.typeOf input == "lambda" then input module
+                                                                            else if builtins.typeOf input == "null" then module
+                                                                            else builtins.throw "4956372387227342" ;
+                                                                        in
+                                                                            with identified ;
+                                                                                {
+                                                                                    environment.systemPackages =
+                                                                                        [
+                                                                                            (
+                                                                                                pkgs.writeShellApplication
+                                                                                                    {
+                                                                                                        name = "test-script" ;
+                                                                                                        runtimeInputs =
+                                                                                                            [
+                                                                                                                pkgs.jq
+                                                                                                                ( config.failure { } )
+                                                                                                            ] ;
+                                                                                                        text =
+                                                                                                            let
+                                                                                                                expected = { success = success ; value = value ; } ;
+                                                                                                                observed = builtins.tryEval ( config.visitor { } visitors arguments ) ;
+                                                                                                            in
+                                                                                                                if expected == observed then ""
+                                                                                                                else
+                                                                                                                    ''
+                                                                                                                        EXPECTED="$( jq "." ${ builtins.toFile "expected" ( builtins.toJSON expected ) } )" || failure 4727697212392530
+                                                                                                                        OBSERVED="$( jq "." ${ builtins.toFile "observed" ( builtins.toJSON observed ) } )" || failure 8774722082080212
+                                                                                                                        jq \
+                                                                                                                            --null-input \
+                                                                                                                            --argjson EXPECTED "$EXPECTED" \
+                                                                                                                            --argjson OBSERVED "$OBSERVED" \
+                                                                                                                            '{
+                                                                                                                                "expected" : $EXPECTED ,
+                                                                                                                                "observed" : $OBSERVED
+                                                                                                                            }' >&2
+                                                                                                                            failure 5942198107310342
+                                                                                                                    '' ;
+                                                                                                    }
+                                                                                            )
+                                                                                        ] ;
+                                                                                    imports = [ failure implementation trip ] ;
+                                                                                } ;
+                                                            testScript =
                                                                 ''
-                                                                    execute-test "$out"
+                                                                    client.wait_for_unit("multi-user.target")
+                                                                    client.succeed("test-script")
                                                                 '' ;
-                                                            name = "test-visitor" ;
-                                                            nativeBuildInputs =
-                                                                [
-                                                                    (
-                                                                        if status then
-                                                                            writeShellApplication
-                                                                                {
-                                                                                    name = "execute-test" ;
-                                                                                    runtimeInputs = [ coreutils ] ;
-                                                                                    text =
-                                                                                        ''
-                                                                                            OUT="$1"
-                                                                                            touch "$OUT"
-                                                                                        '' ;
-                                                                                    }
-                                                                        else
-                                                                            writeShellApplication
-                                                                                {
-                                                                                    name = "execute-test" ;
-                                                                                    runtimeInputs = [ coreutils yq-go ] ;
-                                                                                    text =
-                                                                                        ''
-                                                                                            OUT="$1"
-                                                                                            mkdir --parents "$OUT"
-                                                                                            echo '${ builtins.toJSON { success = success ; value = expected ; } }' | yq --prettyPrint "." > "$OUT/expected.yaml"
-                                                                                            echo '${ builtins.toJSON eval }' | yq --prettyPrint "." > "$OUT/observed.yaml"
-                                                                                            echo EXPECTED >&2
-                                                                                            echo "$OUT/expected.yaml" >&2
-                                                                                            cat "$OUT/expected.yaml" >&2
-                                                                                            echo >&2
-                                                                                            echo OBSERVED >&2
-                                                                                            echo "$OUT/observed.yaml" >&2
-                                                                                            cat "$OUT/observed.yaml" >&2
-                                                                                            echo >&2
-                                                                                            echo DIFF >&2
-                                                                                            diff --unified "$OUT/expected.yaml" "$OUT/observed.yaml"
-                                                                                            exit 64
-                                                                                        '' ;
-                                                                                }
-                                                                    )
-                                                                ] ;
-                                                            src = ./. ;
                                                         } ;
+                                                    in
+                                                        {
+                                                            obviated-by = obviated-by ;
+                                                            test = test ;
+                                                            type = "visitor" ;
+                                                        } ;
+                                    implementation =
+                                        if builtins.typeOf output == "lambda" then output implementation
+                                        else if builtins.typeOf output == "null" then implementation
+                                        else builtins.throw "6526026116388557" ;
                                 } ;
             } ;
 }
